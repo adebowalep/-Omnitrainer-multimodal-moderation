@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omnitrainer"
+version = "1.0.0"
+description = "Multimodal AI content moderation system for customer-service training"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [
+    {name = "OmniTrainer Contributors"},
+]
+keywords = ["pydantic-ai", "content-moderation", "gemini", "multimodal", "fastapi", "gradio"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.0.0",
+    "pydantic-ai>=0.1.0",
+    "google-genai>=0.3.0",
+    "python-dotenv>=1.0.0",
+    "gradio>=4.0.0",
+    "requests>=2.31.0",
+    "filetype>=1.2.0",
+    "arize-phoenix>=12.2.0",
+    "openinference-instrumentation-pydantic-ai>=0.1.7",
+]
+
+[project.scripts]
+multimodal-moderation-api  = "multimodal_moderation.fastapi_app:main"
+multimodal-moderation-chat = "multimodal_moderation.gradio_app:main"
+multimodal-moderation      = "multimodal_moderation.app:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["evals*", "tests*", "notebooks*", "docs*"]
+
+# ---------------------------------------------------------------------------
+# Dev tooling
+# ---------------------------------------------------------------------------
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx>=0.27.0",
+    "black>=24.0.0",
+    "isort>=5.13.0",
+    "flake8>=7.0.0",
+    "pydantic-evals>=1.1.0",
+    "tenacity>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths   = ["tests"]
+addopts     = "-m 'not integration'"
+markers     = [
+    "integration: marks tests that make real external API calls (deselect with '-m not integration')",
+]
+
+[tool.black]
+line-length    = 100
+target-version = ["py312"]
+
+[tool.isort]
+profile     = "black"
+line_length = 100
